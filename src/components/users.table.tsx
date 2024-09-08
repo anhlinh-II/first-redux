@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchListUsers } from '../redux/user/user.slide';
+import { toast } from 'react-toastify';
 
 function UsersTable() {
 
@@ -9,7 +10,8 @@ function UsersTable() {
      const users = useAppSelector(state => state.user.listUsers)
 
      useEffect(() => {
-          dispatch(fetchListUsers());
+          dispatch(fetchListUsers(123));
+          toast('🦄 Wow so easy!')
      }, [])
 
      return (
