@@ -36,6 +36,36 @@ export const createNewUser = createAsyncThunk(
   }
 )
 
+interface IUpdatePayload {
+  email: string;
+  name: string;
+  id: number | null;
+}
+
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async (payload: IUpdatePayload, thunkAPI) => {
+    const res = await fetch(`http://localhost:8000/users/${payload.id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        email: payload.email,
+        name: payload.name,
+      }),
+      headers: {
+        "Content-type": " application/json"
+      }
+    });
+    const data = await res.json();
+    if (data && data.id) {
+      // update success
+      thunkAPI.dispatch(fetchListUsers())
+    }
+    return data;
+  }
+)
+
+
+
 interface IUser {
   id: number;
   name: string;
@@ -44,10 +74,12 @@ interface IUser {
 
 const initialState: {
   listUsers: IUser[],
-  isCreateSuccess: boolean
+  isCreateSuccess: boolean,
+  isUpdateSuccess: boolean
 } = {
   listUsers: [],
-  isCreateSuccess: false
+  isCreateSuccess: false,
+  isUpdateSuccess: false
 }
 
 export const userSlice = createSlice({
@@ -56,6 +88,9 @@ export const userSlice = createSlice({
   reducers: {
     resetCreate: (state) => {
       state.isCreateSuccess = false
+    },
+    resetUpdate: (state) => {
+      state.isUpdateSuccess = false
     }
   },
   extraReducers: (builder) => {
@@ -63,14 +98,16 @@ export const userSlice = createSlice({
     builder.addCase(fetchListUsers.fulfilled, (state, action) => {
       state.listUsers = action.payload
     }),
-    builder.addCase(createNewUser.fulfilled, (state, action) => {
-      state.isCreateSuccess = true
+      builder.addCase(createNewUser.fulfilled, (state, action) => {
+        state.isCreateSuccess = true
+      }),
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.isUpdateSuccess= true
     })
-    
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { resetCreate } = userSlice.actions
+export const { resetCreate, resetUpdate } = userSlice.actions
 
 export default userSlice.reducer

@@ -15,7 +15,7 @@ const UserCreateModal = (props: IProps) => {
 
      const [email, setEmail] = useState<string>("");
      const [name, setName] = useState<string>("");
-
+ 
      const isCreateSuccess = useAppSelector(state => state.user.isCreateSuccess)
 
      useEffect(() => {

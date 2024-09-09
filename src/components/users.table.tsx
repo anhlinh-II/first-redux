@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchListUsers } from '../redux/user/user.slide';
-import { toast } from 'react-toastify';
 import UserDeleteModal from './modal/user.delete.modal';
 import UserUpdateModal from './modal/user.update.modal';
 import { Button } from 'react-bootstrap';
@@ -18,6 +17,7 @@ function UsersTable() {
      const [showDeleteUserModal, setShowDeleteUserModal] = useState<boolean>(false);
      const [showEditModal, setShowEditModal] = useState<boolean>(false);
      const [userEmail, setUserEmail] = useState<string>("");
+     const [userName, setUserName] = useState<string>("");
      const [userId, setUserId] = useState<number | null>(null);
 
      const dispatch = useAppDispatch();
@@ -38,6 +38,7 @@ function UsersTable() {
           setShowEditModal(true);
           setUserEmail(user.email)
           setUserId(user.id)
+          setUserName(user.name)
      }
 
      console.log(users.length);
@@ -81,6 +82,7 @@ function UsersTable() {
                setShow={setShowEditModal}
                userId={userId}
                userEmail={userEmail}
+               userName={userName}
           />
      </>
 
