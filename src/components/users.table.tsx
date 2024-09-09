@@ -24,7 +24,7 @@ function UsersTable() {
      const users = useAppSelector(state => state.user.listUsers)
 
      useEffect(() => {
-          dispatch(fetchListUsers(123));
+          dispatch(fetchListUsers());
           // toast('🦄 Wow so easy!')
      }, [])
 

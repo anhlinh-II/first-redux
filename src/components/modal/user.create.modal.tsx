@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useAppDispatch } from "../../redux/hooks";
-import { createNewUser } from "../../redux/user/user.slide";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { createNewUser, resetCreate } from "../../redux/user/user.slide";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 interface IProps {
      isOpenCreateModal: boolean;
@@ -15,6 +16,19 @@ const UserCreateModal = (props: IProps) => {
      const [email, setEmail] = useState<string>("");
      const [name, setName] = useState<string>("");
 
+     const isCreateSuccess = useAppSelector(state => state.user.isCreateSuccess)
+
+     useEffect(() => {
+          if (isCreateSuccess === true) {
+               setIsOpenCreateModal(false);
+               toast('🦄 Wow so easy! Create User Successfully!')
+               setEmail("")
+               setName("")
+               // refresh redux
+               dispatch(resetCreate());
+          }
+     }, [isCreateSuccess])
+
      const handleSubmit = () => {
           if (!email)
                return;
@@ -23,12 +37,11 @@ const UserCreateModal = (props: IProps) => {
                return;
           }
           dispatch(createNewUser({ email, name }))
-          setIsOpenCreateModal(false)
      }
 
      console.log("check create >> ", { email, name })
 
-     
+
      return (
           <>
                <Modal show={isOpenCreateModal} onHide={() => setIsOpenCreateModal(!isOpenCreateModal)}>
