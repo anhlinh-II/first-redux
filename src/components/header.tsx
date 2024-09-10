@@ -23,7 +23,8 @@ function Header() {
                     <Navbar.Collapse className="justify-content-end">
                          <Form.Check
                               value={mode}
-                              onChange={(e) => dispatch(changeMode(e.target.value === "light" ? "dark" : "light"))}
+                              defaultChecked={mode === "light" ? false : true}
+                              onChange={(e) => dispatch(changeMode(e.target.checked === true ? "dark" : "light"))}
                               type="switch"
                               id="custom-switch"
                               label={
