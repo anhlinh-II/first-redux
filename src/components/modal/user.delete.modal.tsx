@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { deleteUser, resetDelete } from '../../redux/user/user.slide';
+import { toast } from 'react-toastify';
 
 interface IProps {
      show: boolean;
@@ -10,18 +13,32 @@ interface IProps {
 }
 
 function UserDeleteModal(props: IProps) {
-     //   const [show, setShow] = useState(false);
+     const {setShow} = props
+     const dispatch = useAppDispatch();
+     const isDeleteSuccess = useAppSelector(state => state.user.isDeleteSuccess);
 
-     const handleClose = (id : number | null) => {props.setShow(false)
+     const handleClose = (id: number | null) => {
+          props.setShow(false)
           console.log(id);
      };
      const handleShow = () => props.setShow(true);
 
+     const handleSubmit = () => {
+          dispatch(deleteUser({ id: props.userId }))
+          if (isDeleteSuccess === true) {
+               setShow(false)
+               toast('🦄 Wow so easy! Delete User Successfully!')
+               dispatch(resetDelete())
+          }
+          // props.setShow(false)
+     }
+
+     // useEffect(() => {
+          
+     // }, [isDeleteSuccess])
+
      return (
           <>
-               <Button variant="primary" onClick={handleShow}>
-                    Launch static backdrop modal
-               </Button>
 
                <Modal
                     show={props.show}
@@ -39,7 +56,7 @@ function UserDeleteModal(props: IProps) {
                          <Button variant="secondary" onClick={() => handleClose(props.userId)}>
                               Close
                          </Button>
-                         <Button variant="primary" onClick={() => handleClose(props.userId)}>Understood</Button>
+                         <Button variant="primary" onClick={() => handleSubmit()}>Understood</Button>
                     </Modal.Footer>
                </Modal>
           </>
