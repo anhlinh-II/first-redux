@@ -47,7 +47,7 @@ function UserDeleteModal(props: IProps) {
                     keyboard={false}
                >
                     <Modal.Header closeButton>
-                         <Modal.Title>Modal title</Modal.Title>
+                         <Modal.Title>Delete User</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                          {`Are you sure to delete user with email ${props.userEmail}`}

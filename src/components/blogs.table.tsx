@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { fetchListBlogs } from "../redux/blog/blog.slide";
 import { useEffect, useState } from "react";
 import BlogUpdateModal from "./modal/blog.update.modal";
+import BlogDeleteModal from "./modal/blog.delete.modal";
 
 interface IBlog {
      id: number | null;
@@ -11,15 +12,25 @@ interface IBlog {
      content: string;
 }
 
+interface IBlogDeleteData {
+     id: number | null;
+     title: string;
+}
+
 const BlogsTable = () => {
 
      const [isOpenEditModal, setIsOpenEditModal] = useState<boolean>(false);
-     const [blogData, setBlogData] = useState<IBlog>({
+     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
+     const [blogUpdateData, setBlogUpdateData] = useState<IBlog>({
           id: null,
           title: "",
           author: "",
           content: ""
      });
+     const [blogDeleteData, setBlogDeleteData] = useState<IBlogDeleteData>({
+          id: null,
+          title: ""
+     })
 
      const dispatch = useAppDispatch();
      const blogs = useAppSelector(state => state.blog.listBlogs);
@@ -29,13 +40,21 @@ const BlogsTable = () => {
      }, []);
 
      const handleEditBtn = (blog: IBlog) => {
-          setBlogData({
+          setBlogUpdateData({
                id: blog.id,
                title: blog.title,
                author: blog.author,
                content: blog.content
           })
           setIsOpenEditModal(true);
+     }
+
+     const handleDeleteBtn = (blog : IBlog) => {
+          setBlogDeleteData({
+               id: blog.id,
+               title: blog.title
+          })
+          setIsOpenDeleteModal(true);
      }
 
      return (
@@ -60,7 +79,7 @@ const BlogsTable = () => {
                                         <td>{blog.content}</td>
                                         <td className="ps-3 pe-3">
                                              <Button variant='warning' className='mb-3 mt-3 ps-4 pe-4' onClick={() => handleEditBtn(blog)}>Edit</Button>
-                                             <Button variant='danger' className="pe-3">Delete</Button>
+                                             <Button variant='danger' className="pe-3" onClick={() => handleDeleteBtn(blog)}>Delete</Button>
                                         </td>
                                    </tr>
                               )
@@ -70,7 +89,12 @@ const BlogsTable = () => {
                <BlogUpdateModal
                     show={isOpenEditModal}
                     setShow={setIsOpenEditModal}
-                    blogData={blogData}
+                    blogData={blogUpdateData}
+               />
+               <BlogDeleteModal 
+                    show={isOpenDeleteModal}
+                    setShow={setIsOpenDeleteModal}
+                    blogDeleteData={blogDeleteData}
                />
           </>
      )
