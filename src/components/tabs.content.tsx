@@ -4,9 +4,12 @@ import Tabs from 'react-bootstrap/Tabs';
 import UsersTable from './users.table';
 import { useState } from 'react';
 import UserCreateModal from './modal/user.create.modal';
+import BlogsTable from './blogs.table';
+import BlogsCreateModal from './modal/blog.create.modal';
 
 function TabsContent() {
      const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
+     const [isOpenCreateBlogsModal, setIsOpenCreateBlogsModal] = useState<boolean>(false)
 
      return (
 
@@ -22,7 +25,8 @@ function TabsContent() {
                               <Button
                                    variant='primary'
                                    className='mb-3'
-                                   onClick={() => {setIsOpenCreateModal(!isOpenCreateModal)
+                                   onClick={() => {
+                                        setIsOpenCreateModal(!isOpenCreateModal)
                                         console.log(isOpenCreateModal)
                                    }}
                               >
@@ -32,12 +36,26 @@ function TabsContent() {
                          <UsersTable />
                     </Tab>
                     <Tab eventKey="blog" title="Blogs">
-                         Tab content for blogs
+                         <div className='d-flex justify-content-between'>
+                              <h2>Table Blogs</h2>
+                              <Button
+                                   variant='primary'
+                                   className='mb-3'
+                                   onClick={() => setIsOpenCreateBlogsModal(!isOpenCreateBlogsModal)}
+                              >Add new
+
+                              </Button>
+                         </div>
+                         <BlogsTable />
                     </Tab>
                </Tabs>
                <UserCreateModal
                     isOpenCreateModal={isOpenCreateModal}
                     setIsOpenCreateModal={setIsOpenCreateModal}
+               />
+               <BlogsCreateModal
+                    isOpenCreateBlogsModal={isOpenCreateBlogsModal}
+                    setIsOpenCreateBlogsModal={setIsOpenCreateBlogsModal}
                />
           </Container>
      );
